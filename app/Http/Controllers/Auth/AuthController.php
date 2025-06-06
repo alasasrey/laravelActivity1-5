@@ -9,36 +9,66 @@ use Illuminate\Support\Facades\Session;
 
 class AuthController extends Controller
 {
-    public function index()
+    // Login
+public function index()
+{
+        if (Session::has('loginId')) {
+            return redirect()->route('std.myView');
+        }
+return view('auth.login');
+}
+
+public function login(Request $request)
+{
+$request->validate([
+'email' => 'required|email',
+'password' => 'required',
+]);
+
+$loginAuth = User::where('email', '=', $request->email)
+->first();
+
+if ($loginAuth) {
+Session::put('loginId', $loginAuth->id);
+return redirect()->route('std.myView')->with('success', 'Login successfully');
+} else {
+return back()->with('error', 'Invalid email or password');
+}
+}
+
+    // Register
+    public function indexRegister()
     {
-        return view('auth.login');
+        if (Session::has('loginId')) {
+            return redirect()->route('std.myView');
+        }
+        return view('auth.register');
     }
 
-    public function login(Request $request)
+    public function userRegister(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
+            'name' => 'required',
+            'email' => 'required',
             'password' => 'required',
         ]);
 
-        $loginAuth = User::where('email', '=', $request->email)
-            ->first();
+        $input['name'] = $request->name;
+        $input['email'] = $request->email;
+        $input['password'] = bcrypt($request->password);
+        User::create($input);
 
-        if ($loginAuth) {
-            Session::put('loginId', $loginAuth->id);
-            return redirect()->route('std.myView')->with('success', 'Login successfully');
-        } else {
-            return back()->with('error', 'Invalid email or password');
-        }
+        return redirect()->route('auth.index')->with('success', 'Registration successful, please login');
     }
 
-    public function logout()
-    {
-        if (Session::has('loginId')) {
-            Session::pull('loginId');
-            return redirect()->route('auth.index')->with('success', 'Logout successfully');
-        } else {
-            return redirect()->route('auth.index')->with('error', 'You are not logged in');
-        }
-    }
+    // Logout
+public function logout()
+{
+if (Session::has('loginId')) {
+Session::pull('loginId');
+return redirect()->route('auth.index')->with('success', 'Logout successfully');
+} else {
+return redirect()->route('auth.index')->with('error', 'You are not logged in');
+}
+}
 }
