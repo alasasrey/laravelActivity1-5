@@ -1,6 +1,8 @@
 @extends('base')
 @section('title', 'Welcome Page')
 
+<a href="{{ route('auth.logout') }}" class="btn btn-danger" style="float: right;">Logout</a>
+
 <div class="centered-div">
     <div class="container">
 
