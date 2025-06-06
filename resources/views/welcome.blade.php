@@ -2,129 +2,172 @@
 @section('title', 'Welcome Page')
 
 <div>
-
-
     <table class="table">
-
-
         <thead>
-
-
             <tr>
-
-
                 <th scope="col">#</th>
-
-
                 <th scope="col">Name</th>
-
-
                 <th scope="col">Age</th>
-
-
                 <th scope="col">Gender</th>
-
-
             </tr>
-
-
         </thead>
-
-
         <tbody>
-
-
             @foreach($students as $std)
-
-
             <tr>
-
-
                 <th scope="row">{{ $std -> id }}</th>
-
-
                 <td>{{ $std -> name }}</td>
-
-
                 <td>{{ $std -> age }}</td>
-
-
                 <td>{{ $std -> gender }}</td>
-
-
             </tr>
-
-
             @endforeach
-
-
         </tbody>
-
-
     </table>
 
+ <span class="alert alert-success">
+More actions
+
+
+        {{ session('success') }}
+
+
+    </span>
 
 
 
 
-    <table class="table">
+
+    <!-- Action btn for modal -->
 
 
-        <thead>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addNewModal">
 
 
-            <tr>
+        Add New Students
 
 
-                <th scope="col">#</th>
+    </button>
 
 
-                <th scope="col">Name</th>
+    <!-- Modal component -->
 
 
-                <th scope="col">Email</th>
+    <div class="modal fade" id="addNewModal" tabindex="-1" aria-hidden="true">
 
 
-                <th scope="col">email_verified_at</th>
+        <div class="modal-dialog">
 
 
-            </tr>
+            <div class="modal-content">
 
 
-        </thead>
+                <div class="modal-header">
 
 
-        <tbody>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
 
 
-            @foreach($users as $user)
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
 
-            <tr>
+                </div>
 
 
-                <th scope="row">{{ $user -> id }}</th>
+                <div class="modal-body">
 
 
-                <td>{{ $user -> name }}</td>
+                    <form method="post" action="{{ route('std.addNewStudent') }}">
 
 
-                <td>{{ $user -> email }}</td>
+                        @csrf
 
 
-                <td>{{ $user -> email_verified_at }}</td>
+                        <div class="mb-3">
 
 
-            </tr>
+                            <label for="name" class="form-label">Name</label>
 
 
-            @endforeach
+                            <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}" placeholder="Enter name">
 
 
-        </tbody>
+                            @error('name')
 
 
-    </table>Add commentMore actions
+                            <span class="text-danger">{{ $message }}</span>
 
+
+                            @enderror
+
+
+                        </div>
+
+
+                        <div class="mb-3">
+
+
+                            <label for="age" class="form-label">Age</label>
+
+
+                            <input type="text" class="form-control" id="age" name="age" value="{{ old('age') }}" placeholder="Enter age">
+
+
+                            @error('age')
+
+
+                            <span class="text-danger">{{ $message }}</span>
+
+
+                            @enderror
+
+
+                        </div>
+
+
+                        <div class="mb-3">
+
+
+                            <label for="gender" class="form-label">Gender</label>
+
+
+                            <input type="text" class="form-control" id="gender" name="gender" value="{{ old('gender') }}" placeholder="Enter gender">
+
+
+                            @error('gender')
+
+
+                            <span class="text-danger">{{ $message }}</span>
+
+
+                            @enderror
+
+
+                        </div>
+
+
+
+
+
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+
+
+                    </form>
+
+
+                </div>
+
+
+
+
+
+
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
 
 </div>
